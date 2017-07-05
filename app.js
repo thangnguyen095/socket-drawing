@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 //var index = require('./routes/index');
 var users = require('./routes/users');
@@ -16,8 +17,8 @@ app.io = io;
 var index = require('./routes/index')(io);
 // detect connections on io
 io.on('connection', function(socket){ 
-	console.log('a user connected.\n');
-	socket.on('disconnect', function(){ console.log('a user disconnected.\n')});
+	console.log('a user connected.');
+	socket.on('disconnect', function(){ console.log('a user disconnected.')});
 });
 
 // view engine setup
@@ -52,5 +53,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// create file to store the drawing
+fs.open('drawing.bin', 'w', (err, fd) => { if(err) throw err; });
 
 module.exports = app;
