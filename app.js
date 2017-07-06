@@ -55,6 +55,6 @@ app.use(function(err, req, res, next) {
 });
 
 // create file to store the drawing
-fs.open('drawing.bin', 'w', (err, fd) => { if(err) throw err; });
+fs.open('drawing.bin', 'w', (err, fd) => { if(err) throw err; fs.close(fd); });
 
 module.exports = app;

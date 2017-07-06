@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "build": "webpack --optimize-minimize"
+    "build": "webpack --optimize-minimize --watch"
   },
   "dependencies": {
     "body-parser": "~1.17.1",

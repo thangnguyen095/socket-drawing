@@ -6,18 +6,18 @@ var io = require('socket.io-client');
 	//var canvas = document.querySelector('canvas');
 	var canvas = document.querySelector('canvas');
 	var ctx = canvas.getContext('2d');
-	canvas.addEventListener('resize', onResize);
+	window.addEventListener('resize', onResize);
 	// make it take effect immediately
 	onResize();
 	// other events for drawing
 	canvas.addEventListener('mousedown', onMouseDown);
-	canvas.addEventListener('mousemove', onMouseMove);
+	canvas.addEventListener('mousemove', throttle(onMouseMove, 100));
 	canvas.addEventListener('mouseup', onMouseUp);
 	canvas.addEventListener('mouseout', onMouseUp);
 
 	// add event handler for socket
 	socket.on('drawing', onDrawing);
-
+	socket.on('storage', drawAll);
 	// other variables
 	var isDrawing = false; // show if user is drawing
 	var x1;
@@ -74,8 +74,28 @@ var io = require('socket.io-client');
 		data.y1 *= h;
 		data.x2 *= w;
 		data.y2 *= h;
-		console.log(data);
 		Draw(data.x1, data.y1, data.x2, data.y2, false);
+	}
+
+	function drawAll(data){
+		data.forEach(function(item){
+			item.x1 *= w;
+			item.y1 *= h;
+			item.x2 *= w;
+			item.y2 *= h;
+			Draw(item.x1, item.y1, item.x2, item.y2, false);
+		});
+	}
+
+	function throttle(callback, delay){
+		var lastCall = new Date().getTime();
+		return function(){
+			var now = new Date().getTime();
+			if((now - lastCall) > delay)
+			{
+				callback.apply(null, arguments);
+			}
+		}
 	}
 
 })();
