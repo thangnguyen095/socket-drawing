@@ -40,7 +40,6 @@ module.exports = function(io){
 			writer.write(data.x2 + '\n');
 			writer.write(data.y2 + '\n');
 			writer.write(data.color + '\n');
-			writer.write(data.stroke + '\n');
 			//writer.end();
 		});
 
@@ -68,13 +67,10 @@ module.exports = function(io){
 				break;
 				case 4:
 					drawing.color = data;
-				break;
-				case 5:
-					drawing.stroke = parseFloat(data);
 					allDrawings.push(drawing);
 				break;
 			}
-			i = ++i%6;
+			i = ++i%5;
 		});
 
 		// send all drawing back to client
