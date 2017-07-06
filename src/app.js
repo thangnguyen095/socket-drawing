@@ -13,9 +13,9 @@ var io = require('socket.io-client');
 	onResize();
 	// other events for drawing
 	canvas.addEventListener('mousedown', onMouseDown);
-	canvas.addEventListener('mousemove', throttle(onMouseMove, 10));
-	canvas.addEventListener('mouseup', onMouseUp);
-	canvas.addEventListener('mouseout', onMouseUp);
+	window.addEventListener('mousemove', throttle(onMouseMove, 10));
+	window.addEventListener('mouseup', onMouseUp);
+	window.addEventListener('mouseout', onMouseUp);
 	colors.addEventListener('click', selectColor);
 
 	// add event handler for socket
