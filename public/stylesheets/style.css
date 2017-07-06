@@ -10,6 +10,61 @@ a {
   color: #00B7FF;
 }
 
+.wrapper {
+	position: relative;
+}
+
+.toolbar {
+	background: rgba(20, 20, 20, .5);
+	border-radius: 10px;
+	position: fixed;
+	top: 20px;
+	right: 10px;
+	padding: 10px;
+}
+
+.toolbar p {
+	text-align: center;
+	color: white;
+}
+
+#stroke {
+	width: 10px;
+	height: 10px;
+	background: #333;
+	border-radius: 50%;
+	margin: 10px auto;
+	border: 1px solid silver;
+}
+
+#colors {
+	margin: 0;
+}
+
+#colors > div {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	margin: 10px;
+	border: 1px solid silver;
+}
+
+#black {
+	background: black;
+}
+
+#white {
+	background: white;
+}
+
+#blue {
+	background: blue;
+}
+
+#red {
+	background: red;
+}
+
 canvas {
-	background: whitesmoke;
+	background: white;
 }

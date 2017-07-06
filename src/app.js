@@ -3,17 +3,19 @@ var io = require('socket.io-client');
 (function(){
 	var socket = io();
 	// adjust canvas size
-	//var canvas = document.querySelector('canvas');
 	var canvas = document.querySelector('canvas');
+	var colors = document.getElementById('colors');
 	var ctx = canvas.getContext('2d');
+	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
 	window.addEventListener('resize', onResize);
 	// make it take effect immediately
 	onResize();
 	// other events for drawing
 	canvas.addEventListener('mousedown', onMouseDown);
-	canvas.addEventListener('mousemove', throttle(onMouseMove, 100));
+	canvas.addEventListener('mousemove', throttle(onMouseMove, 10));
 	canvas.addEventListener('mouseup', onMouseUp);
 	canvas.addEventListener('mouseout', onMouseUp);
+	colors.addEventListener('click', selectColor);
 
 	// add event handler for socket
 	socket.on('drawing', onDrawing);
@@ -24,6 +26,8 @@ var io = require('socket.io-client');
 	var y1;
 	var w;
 	var h;
+	var color = 'black';
+	var stroke = 2;
 
 	// event handlers
 	function onResize(){
@@ -45,16 +49,17 @@ var io = require('socket.io-client');
 
 	function onMouseMove(e){
 		if(!isDrawing) return;
-		Draw(x1, y1, e.clientX, e.clientY, true);
+		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 		x1 = e.clientX;
 		y1 = e.clientY;
 	}
 
-	function Draw(x1, y1, x2, y2, emit){
+	function Draw(x1, y1, x2, y2, color, stroke, emit){
 		ctx.beginPath();
 		ctx.moveTo(x1, y1);
 		ctx.lineTo(x2, y2);
-		ctx.lineWidth = 2;
+		ctx.lineWidth = stroke;
+		ctx.strokeStyle = color;
 		ctx.stroke();
 		ctx.closePath();
 
@@ -66,6 +71,8 @@ var io = require('socket.io-client');
 			y1: y1/h,
 			x2: x2/w,
 			y2: y2/h,
+			color: color,
+			stroke, stroke
 		});
 	}
 
@@ -74,7 +81,7 @@ var io = require('socket.io-client');
 		data.y1 *= h;
 		data.x2 *= w;
 		data.y2 *= h;
-		Draw(data.x1, data.y1, data.x2, data.y2, false);
+		Draw(data.x1, data.y1, data.x2, data.y2, data.color, data.stroke, false);
 	}
 
 	function drawAll(data){
@@ -83,7 +90,7 @@ var io = require('socket.io-client');
 			item.y1 *= h;
 			item.x2 *= w;
 			item.y2 *= h;
-			Draw(item.x1, item.y1, item.x2, item.y2, false);
+			Draw(item.x1, item.y1, item.x2, item.y2, item.color, item.stroke, false);
 		});
 	}
 
@@ -93,9 +100,26 @@ var io = require('socket.io-client');
 			var now = new Date().getTime();
 			if((now - lastCall) > delay)
 			{
+				lastCall = now;
 				callback.apply(null, arguments);
 			}
 		}
+	}
+
+	function selectColor(e){
+		var black = document.getElementById('black');
+		var white = document.getElementById('white');
+		var red = document.getElementById('red');
+		var blue = document.getElementById('blue');
+		if(e.target == black || e.target == white || e.target == blue || e.target == red){
+			return applyColor(e.target.id);
+		}
+		return false;
+	}
+
+	function applyColor(name){
+		color = name;
+		console.log(color);
 	}
 
 })();

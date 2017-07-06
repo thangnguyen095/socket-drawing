@@ -39,6 +39,8 @@ module.exports = function(io){
 			writer.write(data.y1 + '\n');
 			writer.write(data.x2 + '\n');
 			writer.write(data.y2 + '\n');
+			writer.write(data.color + '\n');
+			writer.write(data.stroke + '\n');
 			//writer.end();
 		});
 
@@ -52,21 +54,27 @@ module.exports = function(io){
 			// console.log('line');
 			switch(i){
 				case 0:
-				drawing = new Drawing();
-				drawing.x1 = parseFloat(data);
+					drawing = new Drawing();
+					drawing.x1 = parseFloat(data);
 				break;
 				case 1:
-				drawing.y1 = parseFloat(data);
+					drawing.y1 = parseFloat(data);
 				break;
 				case 2:
-				drawing.x2 = parseFloat(data);
+					drawing.x2 = parseFloat(data);
 				break;
 				case 3:
-				drawing.y2 = parseFloat(data);
-				allDrawings.push(drawing);
+					drawing.y2 = parseFloat(data);
+				break;
+				case 4:
+					drawing.color = data;
+				break;
+				case 5:
+					drawing.stroke = parseFloat(data);
+					allDrawings.push(drawing);
 				break;
 			}
-			i = ++i%4;
+			i = ++i%6;
 		});
 
 		// send all drawing back to client
