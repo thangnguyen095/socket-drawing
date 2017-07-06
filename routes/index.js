@@ -20,26 +20,10 @@ module.exports = function(io){
 	});
 
 	function storeDrawing(data){
-		// fs.open('./drawing.bin', 'a', (err, fd) => {
-		// 	if(err)
-		// 		throw err;
-
-		// 	// write data to file
-		// 	fs.write(fd, data.x1, 0, 8, null);
-		// 	fs.write(fd, data.y1, 0, 8, null);
-		// 	fs.write(fd, data.x2, 0, 8, null);
-		// 	fs.write(fd, data.y2, 0, 8, null);
-		// 	// close file when done
-		// 	fs.close(fd);
-		// });
-
 		var writer = fs.createWriteStream('./drawing.bin', {flags: 'a'});
 		writer.on('open', function(){
-			writer.write(data.x1 + '\n');
-			writer.write(data.y1 + '\n');
-			writer.write(data.x2 + '\n');
-			writer.write(data.y2 + '\n');
-			writer.write(data.color + '\n');
+			var str = data.x1 + ' ' + data.y1 + ' ' + data.x2 + ' ' + data.y2 + ' ' + data.color + '\n';
+			writer.write(str);
 			//writer.end();
 		});
 
@@ -47,30 +31,39 @@ module.exports = function(io){
 
 	function loadAllDrawings(socket){
 		rd = rl.createInterface({input: fs.createReadStream('./drawing.bin')});
-		var i = 0;
-		var drawing;
+		// var i = 0;
+		// var drawing;
 		rd.on('line', function(data){
-			// console.log('line');
-			switch(i){
-				case 0:
-					drawing = new Drawing();
-					drawing.x1 = parseFloat(data);
-				break;
-				case 1:
-					drawing.y1 = parseFloat(data);
-				break;
-				case 2:
-					drawing.x2 = parseFloat(data);
-				break;
-				case 3:
-					drawing.y2 = parseFloat(data);
-				break;
-				case 4:
-					drawing.color = data;
-					allDrawings.push(drawing);
-				break;
-			}
-			i = ++i%5;
+			var res = data.split(" ");
+			var drawing = new Drawing();
+			drawing.x1 = res[0];
+			drawing.y1 = res[1];
+			drawing.x2 = res[2];
+			drawing.y2 = res[3];
+			drawing.color = res[4];
+			allDrawings.push(drawing);
+			// console.log(data);
+			// switch(i){
+			// 	case 0:
+			// 		drawing = new Drawing();
+			// 		drawing.x1 = parseFloat(data);
+			// 	break;
+			// 	case 1:
+			// 		drawing.y1 = parseFloat(data);
+			// 	break;
+			// 	case 2:
+			// 		drawing.x2 = parseFloat(data);
+			// 	break;
+			// 	case 3:
+			// 		drawing.y2 = parseFloat(data);
+			// 	break;
+			// 	case 4:
+			// 		drawing.color = data;
+			// 		console.log(drawing);
+			// 		allDrawings.push(drawing);
+			// 	break;
+			// }
+			// i = ++i%5;
 		});
 
 		// send all drawing back to client

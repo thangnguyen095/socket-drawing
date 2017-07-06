@@ -120,7 +120,6 @@ var io = require('socket.io-client');
 
 	function applyColor(name){
 		color = name;
-		console.log(color);
 	}
 
 	function hideOverlap(){
