@@ -46,7 +46,7 @@ var io = require('socket.io-client');
 	socket.on('drawing', onDrawing);
 	socket.on('storage', drawAll);
 	// other variables
-	var isDrawing = false; // show if user is drawing
+	var isDrawing = false;
 	var x1;
 	var y1;
 	var w;
@@ -131,18 +131,6 @@ var io = require('socket.io-client');
 		});
 		hideOverlap();
 	}
-
-	// function throttle(callback, delay){
-	// 	var lastCall = new Date().getTime();
-	// 	return function(){
-	// 		var now = new Date().getTime();
-	// 		if((now - lastCall) > delay)
-	// 		{
-	// 			lastCall = now;
-	// 			callback.apply(null, arguments);
-	// 		}
-	// 	}
-	// }
 
 	function selectColor(e){
 		var black = document.getElementById('black');
