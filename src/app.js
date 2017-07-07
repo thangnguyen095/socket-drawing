@@ -25,7 +25,7 @@ var io = require('socket.io-client');
 	cursor.addEventListener('mouseup', onMouseUp);
 	// touch event
 	canvas.addEventListener('touchstart', onMouseDown);
-	document.addEventListener('touchmove', onMouseMode);
+	document.addEventListener('touchmove', onMouseMove);
 	document.addEventListener('touchend', onMouseUp);
 
 	// event for selecting color
