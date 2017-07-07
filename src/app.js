@@ -228,7 +228,10 @@ var io = require('socket.io-client');
 	}
 
 	function saveImage(){
-		window.open(canvas.toDataURL());
+		var w = window.open();
+		var img = document.createElement('img');
+		img.src = canvas.toDataURL();
+		w.document.body.appendChild(img);
 	}
 
 })();
