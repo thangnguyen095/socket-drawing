@@ -20,7 +20,7 @@ var io = require('socket.io-client');
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('mouseleave', onMouseUp);
 	// custom cursor on canvas
-	document.addEventListener('mousemove', moveCursor);
+	canvas.addEventListener('mousemove', moveCursor);
 	cursor.addEventListener('mousedown', onMouseDown);
 	cursor.addEventListener('mouseup', onMouseUp);
 	// touch event
