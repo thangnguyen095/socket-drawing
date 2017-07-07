@@ -26,9 +26,9 @@ var io = require('socket.io-client');
 	cursor.addEventListener('mousedown', onMouseDown);
 	cursor.addEventListener('mouseup', onMouseUp);
 	// touch event
-	canvas.addEventListener('touchstart', onMouseDown);
-	document.addEventListener('touchmove', onMouseMove);
-	document.addEventListener('touchend', onMouseUp);
+	// canvas.addEventListener('touchstart', onMouseDown);
+	// document.addEventListener('touchmove', onMouseMove);
+	// document.addEventListener('touchend', onMouseUp);
 
 	// event for selecting color
 	colors.addEventListener('click', selectColor);
@@ -70,13 +70,13 @@ var io = require('socket.io-client');
 		hideToolbar();
 		x1 = e.clientX;
 		y1 = e.clientY;
+		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 	}
 
 	function onMouseUp(e){
 		if(!isDrawing) return;
 		showToolbar();
 		isDrawing = false;
-		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 	}
 
 	function onMouseMove(e){
