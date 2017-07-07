@@ -15,6 +15,11 @@ a {
   color: #00B7FF;
 }
 
+img {
+	max-width: 100%;
+	height: auto;
+}
+
 .wrapper {
 	position: relative;
 }
@@ -26,6 +31,7 @@ a {
 	top: 20px;
 	right: 0;
 	/*padding: 10px;*/
+	padding-right: 5px;
 }
 
 .toolbar .tool {
@@ -35,13 +41,14 @@ a {
 .toolbar .tool-title {
 	text-align: center;
 	color: black;
+	margin: 0 0 5px;
 }
 
 #colors > div {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
-	margin: 10px;
+	margin: 10px auto;
 	border: 1px solid silver;
 	cursor: pointer;
 }
@@ -107,11 +114,6 @@ canvas {
 	width: 100px;
 }
 
-.loading img {
-	max-width: 100%;
-	height: auto;
-}
-
 .credit {
 	position: absolute;
 	right: 0;
@@ -127,4 +129,10 @@ canvas {
 	border: 1px solid #000;
 	border-radius: 50%;
 	cursor: none;
+}
+
+#save-button {
+	width: 30px;
+	display: block;
+	margin: 0 auto;
 }

@@ -10,6 +10,7 @@ var io = require('socket.io-client');
 	var toolbar = document.getElementsByClassName('toolbar')[0];
 	var credit = document.getElementsByClassName('credit')[0];
 	var cursor = document.getElementById('cursor');
+	var saveButton = document.getElementById('save-button');
 
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
@@ -38,6 +39,9 @@ var io = require('socket.io-client');
 	//window.addEventListener('mouseout', disableStroking);
 	// scroll event
 	document.addEventListener('wheel', onWheel);
+	// save event
+	saveButton.addEventListener('click', saveImage);
+
 	// add event handler for socket
 	socket.on('drawing', onDrawing);
 	socket.on('storage', drawAll);
@@ -114,6 +118,10 @@ var io = require('socket.io-client');
 	}
 
 	function drawAll(data){
+		// fill background
+		ctx.fillStyle = '#fff';
+		ctx.fillRect(0, 0, w, h);
+
 		data.forEach(function(item){
 			item.x1 *= w;
 			item.y1 *= h;
@@ -217,6 +225,10 @@ var io = require('socket.io-client');
 		}else{
 			increaseStroke(-1);
 		}
+	}
+
+	function saveImage(){
+		window.open(canvas.toDataURL());
 	}
 
 })();
