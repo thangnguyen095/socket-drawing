@@ -35,7 +35,8 @@ var io = require('socket.io-client');
 	document.addEventListener('mousemove', onStroking);
 	document.addEventListener('mouseup', disableStroking);
 	//window.addEventListener('mouseout', disableStroking);
-
+	// scroll event
+	document.addEventListener('wheel', onWheel);
 	// add event handler for socket
 	socket.on('drawing', onDrawing);
 	socket.on('storage', drawAll);
@@ -176,13 +177,17 @@ var io = require('socket.io-client');
 		if(d == 0)
 			return;
 
+		increaseStroke(d);
+		y1 = e.clientY;
+		var strokeDisplay = strokeE.children['stroke-display'];
+		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
+	}
+
+	function increaseStroke(d){
 		stroke += d;
 		stroke = Math.max(stroke, 5); // min 5 stroke
 		stroke = Math.min(stroke, 30); // max 30 stroke
 		changeCursorSize(stroke);
-		y1 = e.clientY;
-		var strokeDisplay = strokeE.children['stroke-display'];
-		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
 	}
 
 	function hideToolbar(){
@@ -200,6 +205,14 @@ var io = require('socket.io-client');
 
 	function changeCursorSize(w){
 		cursor.style.width = cursor.style.height = w +'px';
+	}
+
+	function onWheel(e){
+		if(e.deltaY < 0){
+			increaseStroke(1);
+		}else{
+			increaseStroke(-1);
+		}
 	}
 
 })();
