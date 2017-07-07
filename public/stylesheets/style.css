@@ -24,12 +24,22 @@ a {
 	/*padding: 10px;*/
 }
 
+.toolbar .tool {
+	margin-bottom: 5px;
+}
+
+.toolbar .tool-title {
+	text-align: center;
+	color: black;
+}
+
 #colors > div {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
 	margin: 10px;
 	border: 1px solid silver;
+	cursor: pointer;
 }
 
 #black {
@@ -52,8 +62,26 @@ a {
 	background: green;
 }
 
+#stroke {
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	text-align: center;
+	cursor: n-resize;
+}
+
+#stroke-display {
+	width: 5px;
+	height: 5px;
+	margin: 0 auto;
+	background: black;
+	border: 1px solid silver;
+	border-radius: 50%;
+}
+
 canvas {
 	background: white;
+	cursor: crosshair;
 }
 
 #overlap {

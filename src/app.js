@@ -6,6 +6,8 @@ var io = require('socket.io-client');
 	var ctx = canvas.getContext('2d');
 	var colors = document.getElementById('colors');
 	var overlap = document.getElementById('overlap');
+	var strokeE = document.getElementById('stroke');
+
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
 	// window.addEventListener('resize', onResize);
@@ -16,7 +18,13 @@ var io = require('socket.io-client');
 	window.addEventListener('mousemove', throttle(onMouseMove, 10));
 	window.addEventListener('mouseup', onMouseUp);
 	window.addEventListener('mouseout', onMouseUp);
+	// event for selecting color
 	colors.addEventListener('click', selectColor);
+	// event for chosing stroke
+	strokeE.addEventListener('mousedown', enableStroking);
+	window.addEventListener('mousemove', onStroking);
+	window.addEventListener('mouseup', disableStroking);
+	//window.addEventListener('mouseout', disableStroking);
 
 	// add event handler for socket
 	socket.on('drawing', onDrawing);
@@ -28,7 +36,8 @@ var io = require('socket.io-client');
 	var w;
 	var h;
 	var color = 'black';
-	var stroke = 4;
+	var stroke = 5;
+	var isStroking = false;
 
 	// event handlers
 	function onResize(){
@@ -45,21 +54,22 @@ var io = require('socket.io-client');
 	function onMouseUp(e){
 		if(!isDrawing) return;
 		isDrawing = false;
-		Draw(x1, y1, e.clientX, e.clientY, color, true);
+		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 	}
 
 	function onMouseMove(e){
 		if(!isDrawing) return;
-		Draw(x1, y1, e.clientX, e.clientY, color, true);
+		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 		x1 = e.clientX;
 		y1 = e.clientY;
 	}
 
-	function Draw(x1, y1, x2, y2, color, emit){
+	function Draw(x1, y1, x2, y2, color, stroke, emit){
 		ctx.beginPath();
 		ctx.moveTo(x1, y1);
 		ctx.lineTo(x2, y2);
 		ctx.lineWidth = stroke;
+		ctx.lineCap = 'round';
 		ctx.strokeStyle = color;
 		ctx.stroke();
 		ctx.closePath();
@@ -72,7 +82,8 @@ var io = require('socket.io-client');
 			y1: y1/h,
 			x2: x2/w,
 			y2: y2/h,
-			color: color
+			color: color,
+			stroke: stroke
 		});
 	}
 
@@ -81,7 +92,7 @@ var io = require('socket.io-client');
 		data.y1 *= h;
 		data.x2 *= w;
 		data.y2 *= h;
-		Draw(data.x1, data.y1, data.x2, data.y2, data.color, false);
+		Draw(data.x1, data.y1, data.x2, data.y2, data.color, data.stroke, false);
 	}
 
 	function drawAll(data){
@@ -90,7 +101,7 @@ var io = require('socket.io-client');
 			item.y1 *= h;
 			item.x2 *= w;
 			item.y2 *= h;
-			Draw(item.x1, item.y1, item.x2, item.y2, item.color, false);
+			Draw(item.x1, item.y1, item.x2, item.y2, item.color, item.stroke, false);
 		});
 		hideOverlap();
 	}
@@ -124,6 +135,32 @@ var io = require('socket.io-client');
 
 	function hideOverlap(){
 		overlap.style.display = 'none';
+	}
+
+	function enableStroking(e){
+		e.preventDefault();
+		isStroking = true;
+		y1 = e.clientY;
+	}
+
+	function disableStroking(){
+		isStroking = false;
+	}
+
+	function onStroking(e){
+		if(!isStroking)
+			return;
+
+		var d = parseInt((y1 - e.clientY)/10); // take integer only
+		if(d == 0)
+			return;
+
+		stroke += d;
+		stroke = Math.max(stroke, 5); // min 5 stroke
+		stroke = Math.min(stroke, 30); // max 30 stroke
+		y1 = e.clientY;
+		var strokeDisplay = strokeE.children['stroke-display'];
+		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
 	}
 
 })();

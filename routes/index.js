@@ -22,7 +22,7 @@ module.exports = function(io){
 	function storeDrawing(data){
 		var writer = fs.createWriteStream('./drawing.bin', {flags: 'a'});
 		writer.on('open', function(){
-			var str = data.x1 + ' ' + data.y1 + ' ' + data.x2 + ' ' + data.y2 + ' ' + data.color + '\n';
+			var str = data.x1 + ' ' + data.y1 + ' ' + data.x2 + ' ' + data.y2 + ' ' + data.color + ' ' + data.stroke + '\n';
 			writer.write(str);
 			//writer.end();
 		});
@@ -41,6 +41,7 @@ module.exports = function(io){
 			drawing.x2 = res[2];
 			drawing.y2 = res[3];
 			drawing.color = res[4];
+			drawing.stroke = res[5];
 			allDrawings.push(drawing);
 			// console.log(data);
 			// switch(i){
