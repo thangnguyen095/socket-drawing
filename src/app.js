@@ -9,6 +9,7 @@ var io = require('socket.io-client');
 	var strokeE = document.getElementById('stroke');
 	var toolbar = document.getElementsByClassName('toolbar')[0];
 	var credit = document.getElementsByClassName('credit')[0];
+	var cursor = document.getElementById('cursor');
 
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
@@ -16,16 +17,20 @@ var io = require('socket.io-client');
 	// make it take effect immediately
 	onResize();
 	// other events for drawing
-	canvas.addEventListener('mousedown', onMouseDown);
-	window.addEventListener('mousemove', onMouseMove);
-	window.addEventListener('mouseup', onMouseUp);
-	window.addEventListener('mouseout', onMouseUp);
+	// canvas.addEventListener('mousedown', onMouseDown);
+	document.addEventListener('mousemove', onMouseMove);
+	// canvas.addEventListener('mouseup', onMouseUp);
+	document.addEventListener('mouseleave', onMouseUp);
+	// custom cursor on canvas
+	canvas.addEventListener('mousemove', moveCursor);
+	cursor.addEventListener('mousedown', onMouseDown);
+	cursor.addEventListener('mouseup', onMouseUp);
 	// event for selecting color
 	colors.addEventListener('click', selectColor);
 	// event for chosing stroke
 	strokeE.addEventListener('mousedown', enableStroking);
-	window.addEventListener('mousemove', onStroking);
-	window.addEventListener('mouseup', disableStroking);
+	document.addEventListener('mousemove', onStroking);
+	document.addEventListener('mouseup', disableStroking);
 	//window.addEventListener('mouseout', disableStroking);
 
 	// add event handler for socket
@@ -64,7 +69,6 @@ var io = require('socket.io-client');
 	}
 
 	function onMouseMove(e){
-		console.log(isDrawing);
 		if(!isDrawing) return;
 		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 		x1 = e.clientX;
@@ -138,6 +142,7 @@ var io = require('socket.io-client');
 
 	function applyColor(name){
 		color = name;
+		cursor.style.borderColor = name;
 	}
 
 	function hideOverlap(){
@@ -169,6 +174,7 @@ var io = require('socket.io-client');
 		stroke += d;
 		stroke = Math.max(stroke, 5); // min 5 stroke
 		stroke = Math.min(stroke, 30); // max 30 stroke
+		changeCursorSize(stroke);
 		y1 = e.clientY;
 		var strokeDisplay = strokeE.children['stroke-display'];
 		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
@@ -180,6 +186,15 @@ var io = require('socket.io-client');
 
 	function showToolbar(){
 		toolbar.style.display = credit.style.display = 'block';
+	}
+
+	function moveCursor(e){
+		cursor.style.top = e.clientY - cursor.offsetHeight/2 + 'px';
+		cursor.style.left = e.clientX - cursor.offsetWidth/2 + 'px';
+	}
+
+	function changeCursorSize(w){
+		cursor.style.width = cursor.style.height = w +'px';
 	}
 
 })();

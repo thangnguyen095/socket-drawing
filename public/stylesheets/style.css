@@ -85,7 +85,7 @@ a {
 
 canvas {
 	background: white;
-	cursor: crosshair;
+	cursor: none;
 }
 
 #overlap {
@@ -118,4 +118,13 @@ canvas {
 	bottom: 0;
 	color: #333;
 	padding: 0 10px;
+}
+
+#cursor {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000;
+	border-radius: 50%;
+	cursor: none;
 }
