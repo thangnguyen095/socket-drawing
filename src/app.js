@@ -7,6 +7,8 @@ var io = require('socket.io-client');
 	var colors = document.getElementById('colors');
 	var overlap = document.getElementById('overlap');
 	var strokeE = document.getElementById('stroke');
+	var toolbar = document.getElementsByClassName('toolbar')[0];
+	var credit = document.getElementsByClassName('credit')[0];
 
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
@@ -49,17 +51,20 @@ var io = require('socket.io-client');
 
 	function onMouseDown(e){
 		isDrawing = true;
+		hideToolbar();
 		x1 = e.clientX;
 		y1 = e.clientY;
 	}
 
 	function onMouseUp(e){
 		if(!isDrawing) return;
+		showToolbar();
 		isDrawing = false;
 		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 	}
 
 	function onMouseMove(e){
+		console.log(isDrawing);
 		if(!isDrawing) return;
 		Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 		x1 = e.clientX;
@@ -108,17 +113,17 @@ var io = require('socket.io-client');
 		hideOverlap();
 	}
 
-	function throttle(callback, delay){
-		var lastCall = new Date().getTime();
-		return function(){
-			var now = new Date().getTime();
-			if((now - lastCall) > delay)
-			{
-				lastCall = now;
-				callback.apply(null, arguments);
-			}
-		}
-	}
+	// function throttle(callback, delay){
+	// 	var lastCall = new Date().getTime();
+	// 	return function(){
+	// 		var now = new Date().getTime();
+	// 		if((now - lastCall) > delay)
+	// 		{
+	// 			lastCall = now;
+	// 			callback.apply(null, arguments);
+	// 		}
+	// 	}
+	// }
 
 	function selectColor(e){
 		var black = document.getElementById('black');
@@ -167,6 +172,14 @@ var io = require('socket.io-client');
 		y1 = e.clientY;
 		var strokeDisplay = strokeE.children['stroke-display'];
 		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
+	}
+
+	function hideToolbar(){
+		toolbar.style.display = credit.style.display = 'none';
+	}
+
+	function showToolbar(){
+		toolbar.style.display = credit.style.display = 'block';
 	}
 
 })();

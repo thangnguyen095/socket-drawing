@@ -5,6 +5,10 @@ body {
   padding: 0;
   overflow: hidden;
   background: grey;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 a {
