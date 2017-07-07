@@ -10,12 +10,12 @@ var io = require('socket.io-client');
 
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
-	// window.addEventListener('resize', onResize);
+	window.addEventListener('resize', onResize);
 	// make it take effect immediately
 	onResize();
 	// other events for drawing
 	canvas.addEventListener('mousedown', onMouseDown);
-	window.addEventListener('mousemove', throttle(onMouseMove, 10));
+	window.addEventListener('mousemove', onMouseMove);
 	window.addEventListener('mouseup', onMouseUp);
 	window.addEventListener('mouseout', onMouseUp);
 	// event for selecting color
@@ -36,13 +36,15 @@ var io = require('socket.io-client');
 	var w;
 	var h;
 	var color = 'black';
-	var stroke = 5;
+	var stroke = 10;
 	var isStroking = false;
 
 	// event handlers
 	function onResize(){
 		canvas.width = w =  window.innerWidth;
 		canvas.height = h = window.innerHeight;
+		socket.emit('storage');
+		showOverlap();
 	}
 
 	function onMouseDown(e){
@@ -135,6 +137,10 @@ var io = require('socket.io-client');
 
 	function hideOverlap(){
 		overlap.style.display = 'none';
+	}
+
+	function showOverlap(){
+		overlap.style.display = 'block';
 	}
 
 	function enableStroking(e){

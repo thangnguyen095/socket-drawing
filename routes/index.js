@@ -17,6 +17,10 @@ module.exports = function(io){
 			storeDrawing(data);
 			socket.broadcast.emit('drawing', data);
 		});
+
+		socket.on('storage', function(){
+			loadAllDrawings(socket);
+		});
 	});
 
 	function storeDrawing(data){
