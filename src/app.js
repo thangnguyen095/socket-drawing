@@ -148,7 +148,10 @@ var io = require('socket.io-client');
 
 	function applyColor(name){
 		color = name;
-		cursor.style.borderColor = name;
+		if(name != 'white')
+			cursor.style.borderColor = name;
+		else
+			cursor.style.borderColor = 'black';			
 	}
 
 	function hideOverlap(){
