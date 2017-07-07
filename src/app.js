@@ -21,6 +21,7 @@ var io = require('socket.io-client');
 	document.addEventListener('mouseleave', onMouseUp);
 	// custom cursor on canvas
 	canvas.addEventListener('mousemove', moveCursor);
+	cursor.addEventListener('mousemove', moveCursor);
 	cursor.addEventListener('mousedown', onMouseDown);
 	cursor.addEventListener('mouseup', onMouseUp);
 	// touch event
@@ -182,14 +183,14 @@ var io = require('socket.io-client');
 
 		increaseStroke(d);
 		y1 = e.clientY;
-		var strokeDisplay = strokeE.children['stroke-display'];
-		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
 	}
 
 	function increaseStroke(d){
 		stroke += d;
 		stroke = Math.max(stroke, 5); // min 5 stroke
 		stroke = Math.min(stroke, 30); // max 30 stroke
+		var strokeDisplay = strokeE.children['stroke-display'];
+		strokeDisplay.style.width = strokeDisplay.style.height = stroke +'px';
 		changeCursorSize(stroke);
 	}
 
