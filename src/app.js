@@ -13,18 +13,21 @@ var io = require('socket.io-client');
 
 	// adjust canvas size
 	window.addEventListener('contextmenu', function(e){ e.preventDefault(); }); // disable context menu
-	window.addEventListener('resize', onResize);
+	window.addEventListener('resize', function(){ onResize(true); });
 	// make it take effect immediately
-	onResize();
+	onResize(false);
 	// other events for drawing
-	// canvas.addEventListener('mousedown', onMouseDown);
 	document.addEventListener('mousemove', onMouseMove);
-	// canvas.addEventListener('mouseup', onMouseUp);
 	document.addEventListener('mouseleave', onMouseUp);
 	// custom cursor on canvas
-	canvas.addEventListener('mousemove', moveCursor);
+	document.addEventListener('mousemove', moveCursor);
 	cursor.addEventListener('mousedown', onMouseDown);
 	cursor.addEventListener('mouseup', onMouseUp);
+	// touch event
+	canvas.addEventListener('touchstart', onMouseDown);
+	document.addEventListener('touchmove', onMouseMode);
+	document.addEventListener('touchend', onMouseUp);
+
 	// event for selecting color
 	colors.addEventListener('click', selectColor);
 	// event for chosing stroke
@@ -47,11 +50,13 @@ var io = require('socket.io-client');
 	var isStroking = false;
 
 	// event handlers
-	function onResize(){
+	function onResize(redraw){
 		canvas.width = w =  window.innerWidth;
 		canvas.height = h = window.innerHeight;
-		socket.emit('storage');
-		showOverlap();
+		if(redraw){
+			socket.emit('storage');
+			showOverlap();
+		}
 	}
 
 	function onMouseDown(e){
