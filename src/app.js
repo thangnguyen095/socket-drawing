@@ -229,7 +229,7 @@ var io = require('socket.io-client');
 
 	function saveImage(){
 		var w = window.open();
-		var img = document.createElement('img');
+		var img = w.document.createElement('img');
 		img.src = canvas.toDataURL();
 		w.document.body.appendChild(img);
 	}
