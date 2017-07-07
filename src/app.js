@@ -1,4 +1,3 @@
-require('../public/stylesheets/style.css');
 var io = require('socket.io-client');
 
 (function(){
