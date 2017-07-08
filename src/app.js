@@ -18,7 +18,7 @@ var io = require('socket.io-client');
 	// make it take effect immediately
 	onResize(false);
 	// other events for drawing
-	document.addEventListener('mousemove', onMouseMove);
+	document.addEventListener('mousemove', throttle(onMouseMove, 10));
 	document.addEventListener('mouseleave', onMouseUp);
 	// custom cursor on canvas
 	canvas.addEventListener('mousemove', moveCursor);
@@ -220,6 +220,16 @@ var io = require('socket.io-client');
 		var img = w.document.createElement('img');
 		img.src = canvas.toDataURL();
 		w.document.body.appendChild(img);
+	}
+
+	function throttle(callback, delay){
+		var lastCall = new Date().getTime();
+		return function(){
+			var now = new Date().getTime();
+			if((now - lastCall) >= delay){
+				callback.apply(null, arguments);
+			}
+		}
 	}
 
 })();
