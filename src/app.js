@@ -18,7 +18,7 @@ var io = require('socket.io-client');
 	// make it take effect immediately
 	onResize(false);
 	// other events for drawing
-	document.addEventListener('mousemove', throttle(onMouseMove, 10));
+	document.addEventListener('mousemove', throttle(onMouseMove, 20));
 	document.addEventListener('mouseleave', onMouseUp);
 	// custom cursor on canvas
 	canvas.addEventListener('mousemove', moveCursor);
@@ -75,6 +75,9 @@ var io = require('socket.io-client');
 
 	function onMouseUp(e){
 		if(!isDrawing) return;
+
+		if(x1 != e.clientX && y1 != e.clientY)
+			Draw(x1, y1, e.clientX, e.clientY, color, stroke, true);
 		showToolbar();
 		isDrawing = false;
 	}
@@ -227,6 +230,7 @@ var io = require('socket.io-client');
 		return function(){
 			var now = new Date().getTime();
 			if((now - lastCall) >= delay){
+				lastCall = now;
 				callback.apply(null, arguments);
 			}
 		}
