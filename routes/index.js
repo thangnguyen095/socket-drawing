@@ -28,12 +28,17 @@ module.exports = function(io){
 		writer.on('open', function(){
 			var str = data.x1 + ' ' + data.y1 + ' ' + data.x2 + ' ' + data.y2 + ' ' + data.color + ' ' + data.stroke + '\n';
 			writer.write(str);
-			//writer.end();
+			// writer.end();
 		});
 
 	}
 
 	function loadAllDrawings(socket){
+		if(!fs.existsSync('./drawing.bin')){
+			allDrawings = [];
+			io.sockets.in(socket.id).emit('storage', allDrawings);
+			return;
+		}
 		rd = rl.createInterface({input: fs.createReadStream('./drawing.bin')});
 		rd.on('line', function(data){
 			var res = data.split(" ");
